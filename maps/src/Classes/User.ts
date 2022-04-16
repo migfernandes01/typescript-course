@@ -1,7 +1,9 @@
 // file that holds the User class
 import faker from 'faker';  // 3rd party module to generate fake data
+import { Mappable } from './CustomMap'; // Mappable interface
 
-export class User {
+// class that represents a User, that satisfies the Mappable interface
+export class User implements Mappable {
     name: string;
     location: {
         lat: number;
@@ -14,5 +16,9 @@ export class User {
             lat: parseFloat(faker.address.latitude()),
             lng: parseFloat(faker.address.longitude())
         }
+    }
+
+    markerContent(): string {
+        return `<h1>User Name: ${this.name}</h1>`;
     }
 }

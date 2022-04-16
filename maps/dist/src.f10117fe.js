@@ -136883,6 +136883,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.User = void 0; // file that holds the User class
 
 var faker_1 = __importDefault(require("faker")); // 3rd party module to generate fake data
+// class that represents a User, that satisfies the Mappable interface
 
 
 var User =
@@ -136895,6 +136896,10 @@ function () {
       lng: parseFloat(faker_1.default.address.longitude())
     };
   }
+
+  User.prototype.markerContent = function () {
+    return "<h1>User Name: ".concat(this.name, "</h1>");
+  };
 
   return User;
 }();
@@ -136915,6 +136920,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.Company = void 0; // file that holds the Company class
 
 var faker_1 = __importDefault(require("faker")); // 3rd party module to generate fake data
+// class that represents a Company, that satisfies the Mappable interface
 
 
 var Company =
@@ -136928,6 +136934,10 @@ function () {
       lng: parseFloat(faker_1.default.address.longitude())
     };
   }
+
+  Company.prototype.markerContent = function () {
+    return "\n            <div>\n                <h1>Company Name: ".concat(this.companyName, "</h1>\n                <h3>Catch Phrase: ").concat(this.catchPhrase, "</h3>\n            </div>\n            ");
+  };
 
   return Company;
 }();
@@ -136957,12 +136967,20 @@ function () {
   }
 
   CustomMap.prototype.addMarker = function (mappable) {
-    new google.maps.Marker({
+    var _this = this;
+
+    var marker = new google.maps.Marker({
       map: this.googleMap,
       position: {
         lat: mappable.location.lat,
         lng: mappable.location.lat
       }
+    });
+    marker.addListener('click', function () {
+      var infoWindow = new google.maps.InfoWindow({
+        content: mappable.markerContent()
+      });
+      infoWindow.open(_this.googleMap, marker);
     });
   };
 
@@ -136988,8 +137006,10 @@ var user = new User_1.User();
 console.log(user); // new instance of Company
 
 var company = new Company_1.Company();
-console.log(company);
-var map = new CustomMap_1.CustomMap('map');
+console.log(company); // new instance of our custom map class(div id)
+
+var map = new CustomMap_1.CustomMap('map'); // add markers for user and company
+
 map.addMarker(user);
 map.addMarker(company);
 },{"./Classes/User":"src/Classes/User.ts","./Classes/Company":"src/Classes/Company.ts","./Classes/CustomMap":"src/Classes/CustomMap.ts"}],"../../../../Users/migam/AppData/Roaming/nvm/v14.17.6/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -137020,7 +137040,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54134" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62975" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

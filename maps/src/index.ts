@@ -10,6 +10,9 @@ console.log(user);
 const company = new Company();
 console.log(company);
 
+// new instance of our custom map class(div id)
 const map = new CustomMap('map');
+
+// add markers for user and company
 map.addMarker(user);
 map.addMarker(company);
