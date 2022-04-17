@@ -1,40 +1,26 @@
-class Sorter {
-    collection: number[] | string;
+import { NumbersCollection } from "./classes/NumbersCollection";
+import { CharactersCollection } from "./classes/CharactersCollection";
+import { LinkedList } from "./classes/LinkedList";
 
-    constructor(collection: number[] | string) {
-        this.collection = collection;
-    }
+// create arr of num, sort and log
+const numbersCollection = new NumbersCollection([3, 7, -10, 42, 5, -1000]);
+numbersCollection.sort();
+console.log('Sorted array: ', numbersCollection.data);
 
-    sort(): void {
-        // distructor length from collection, type num
-        const { length } = this.collection;
+// create string, sort and log
+const string = new CharactersCollection('bcaWlz');
+string.sort();
+console.log('Sorted string: ', string.data)
 
-        for (let i = 0; i < length; i++){
-            for(let j = 0; j < length - i -1 ; j++){
-                // type guard, restores all methods of type Array
-                if(this.collection instanceof Array){
-                    // if collection === number[]
-                    // if left number is greater than right
-                    if(this.collection[j] > this.collection[j + 1]){
-                        // swap them
-                        const leftHand = this.collection[j];
-                        this.collection[j] = this.collection[j + 1];
-                        this.collection[j + 1] = leftHand
-                    }
-                }
+// create LinkedList, add numbers to it
+const list = new LinkedList();
+list.add(500);
+list.add(-10);
+list.add(-3);
+list.add(5);
+list.add(52);
 
-                // type guard, if collection is of type string
-                if(typeof this.collection === 'string'){
-                    // write code if collection is a string
-                }
-
-            }
-        }
-    }
-}
-
-const numbers = new Sorter([3, 7, -10, 42, 5]);
-numbers.sort();
-console.log(numbers.collection);
-
-const word = new Sorter('yrabgW')
+// sort and print linked list
+list.sort();
+console.log('Sorted linked list: ');
+list.print();
