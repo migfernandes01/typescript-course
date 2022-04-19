@@ -1,20 +1,25 @@
-import { CsvFileReader } from "./CsvFileReader";
-import { MatchResult } from "./MatchResult";
+import { MatchReader } from "./MatchReader";
+import { ConsoleReport } from "./ReportTargets/ConsoleReport";
+import { HtmlReport } from "./ReportTargets/HtmlReport";
+import { WinsAnalysis } from "./Analysers/WinsAnalysis";
+import { Summary } from "./Summary";
 
-const reader = new CsvFileReader('football.csv');
-reader.read();
+// new instance of MatchReader
+const matches = new MatchReader('football.csv');
+matches.read();
 
-const dateOfFirstMatch = reader.data[0][0];
-console.log('Date of first match: ', dateOfFirstMatch);
+// CLASS COMPOSITION TO GENERATE REPORTS
 
-let manUnitedWins = 0;
+// HTML REPORT
+// static method inside Summary class
+Summary.winsAnalysisWithHtmlReport('Man City');
 
-for(let match of reader.data) {
-    if(match[1] === 'Man United' && match[5] === MatchResult.HomeWin){
-        manUnitedWins++;
-    } else if (match[2] === 'Man United' && match[5] === MatchResult.AwayWin){
-        manUnitedWins++;
-    }
-}
 
-console.log('Man United wins in 2018/2019: ', manUnitedWins);
+// CONSOLE REPORT
+// new instance of summmary taking
+// a new instance of WinsAnalysis and new instance of ConsoleReport
+const consoleSummary = new Summary(
+    new WinsAnalysis('Man United'), new ConsoleReport()
+);
+
+consoleSummary.buildAndPrintReport(matches.data);

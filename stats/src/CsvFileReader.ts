@@ -1,16 +1,19 @@
 import fs from 'fs';    // file system nodejs module
 import { MatchResult } from './MatchResult';
-import { dateStringToDate } from './utils';
 
-// new type as a tuple 
-type MatchData = [Date, string, string , number, number, MatchResult, string];
-
-// class to represent CSV file reader
-export class CsvFileReader {
-    data: MatchData[]= [];
+// abstract class to represent CSV file reader
+export abstract class CsvFileReader <T> {
+    // fields
+    data: T[]= [];
     
+    // constructor initializing filename property with what we get instanciating the class
     constructor(public filename: string) {}
 
+    // abstract class definition
+    abstract mapRow(row: string[]): T;
+
+    // methods
+    // read a file using fs
     read(): void {
         this.data = fs.readFileSync(this.filename, {
             encoding: 'utf-8'
@@ -19,16 +22,6 @@ export class CsvFileReader {
         .map((row:string): string[] => {
             return row.split(',');  // create an array at every comma
         })
-        .map((row: string[]): MatchData => {
-            return [
-                dateStringToDate(row[0]),
-                row[1],
-                row[2],
-                parseInt(row[3]),
-                parseInt(row[4]),
-                row[5] as MatchResult,   // 'H', 'A' or 'D'
-                row[6]
-            ]
-        })
+        .map(this.mapRow);
     }
 }
