@@ -1,6 +1,8 @@
+import { Model } from "./Model";
 import { Attributes } from "./Attributes";
-import { Eventing } from "./Eventing";
-import { Sync } from './Sync';
+import { ApiSync } from "./ApiSync";
+import { Eventing } from './Eventing';
+import { Collection } from "./Collection";
 
 // interface containing an object with properties of a User
 export interface UserProps {
@@ -12,31 +14,27 @@ export interface UserProps {
 const rootUrl = 'http://localhost:3000/users';
 
 // class that represents a User
-export class User {
-    // events property, an instance of Eventing class
-    public events: Eventing = new Eventing();
-    // sync property, an instance of generic Sync class
-    public sync: Sync<UserProps> = new Sync<UserProps>(rootUrl);
-    // attributes property, and instance of generic Attributes class (contains getters and setters)
-    public attibutes: Attributes<UserProps>;
-
-    // constructor to inicialize attributes property
-    constructor(attrs: UserProps){
-        this.attibutes = new Attributes<UserProps>(attrs);
+export class User extends Model<UserProps>{
+    // static method to create an instance of a User
+    static buildUser(attrs: UserProps): User {
+        return new User(
+            new Attributes<UserProps>(attrs),
+            new Eventing(),
+            new ApiSync<UserProps>(rootUrl)
+        );
     }
 
-    // return reference to events.on method
-    get on() {
-        return this.events.on;
+    // satic method to create a user collection
+    static buildUserCollection(): Collection<User, UserProps> {
+        return new Collection<User, UserProps>(
+            rootUrl,
+            (json: UserProps) => User.buildUser(json)
+        );
     }
 
-    // return reference to events.trigger method
-    get trigger() {
-        return this.events.trigger;
-    }
-
-    // return reference to attributes.get method
-    get get() {
-        return this.attibutes.get;
+    // method to set a random age
+    setRandomAge(): void {
+        const age = Math.round(Math.random() * 100);
+        this.set({ age }); 
     }
 }

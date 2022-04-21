@@ -6,7 +6,7 @@ interface HasId {
 }
 
 // generic class that represents the sync operations to the backend
-export class Sync <T extends HasId> {
+export class ApiSync <T extends HasId> {
     // set rootId in constructor
     constructor(public rootUrl: string){}
 

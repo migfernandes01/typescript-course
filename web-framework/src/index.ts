@@ -1,12 +1,37 @@
-import { User } from "./Models/User";
+import { User, UserProps } from "./Models/User";
+import { UserEdit } from "./Views/UserEdit";
+import { UserList } from "./Views/UserList";
+import { Collection } from "./Models/Collection";
 
-const user = new User({ name: 'New', age: 0 });
+/* const user = User.buildUser({ name: 'Miguel', age: 20 });
 
-const name = user.get('name');
-console.log(name);
+const root = document.getElementById('root');
 
-user.on('change', () => {
-    console.log('onChange');
+if(root) {
+    const userEdit = new UserEdit(
+        root,
+        user
+    );
+    userEdit.render();
+
+    console.log(userEdit);
+} else {
+    throw new Error('root element not found'); 
+} */
+
+
+const users = new Collection('http://localhost:3000/users', (json: UserProps) => {
+    return User.buildUser(json);
 });
 
-user.trigger('change');
+users.on('change', () => {
+    const root = document.getElementById('root');
+
+if(root) {
+    new UserList(root, users).render();
+} else {
+    throw new Error('root element not found'); 
+}
+});
+
+users.fetch();

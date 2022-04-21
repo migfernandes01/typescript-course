@@ -9,6 +9,11 @@ export class Attributes <T> {
         return this.data[key];
     }
 
+    // method to return all data
+    getAll(): T {
+        return this.data;
+    }
+
     // method to set user data
     set(update: T): void {
         // assign update object to data object
